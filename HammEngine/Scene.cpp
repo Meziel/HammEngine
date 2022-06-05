@@ -76,12 +76,12 @@ namespace GameEngine
 
 			// Put vertices in a vertex buffer object
 			GLuint vaos[1];
-			GLuint vbos[1];
+			GLuint vbos[2];
 			GLint attrib;
 
 			// Tell OpenGL to allocate 1 buffer & array object
 			glGenVertexArrays(1, vaos);
-			glGenBuffers(1, vbos);
+			glGenBuffers(2, vbos);
 
 			glBindVertexArray(vaos[0]);;
 
@@ -98,16 +98,36 @@ namespace GameEngine
 			// Sets vPosition to use currently bound GL_ARRAY_BUFFER
 			glEnableVertexAttribArray(attrib);
 
-			// Set MVP
-			GLint mvpUniform;
-			mvpUniform = glGetUniformLocation(shaderComponent->getProgram(), "mvp");
-			glm::mat4 mvp = this->createMVP(gameObject.get());
-			glUniformMatrix4fv(mvpUniform, 1, GL_FALSE, glm::value_ptr(mvp));
+			// Bind to index 1 of the buffer object. Subsequent buffer functions will use this index
+			glBindBuffer(GL_ARRAY_BUFFER, vbos[1]);
+
+			// Add normals to buffer object
+			glBufferData(GL_ARRAY_BUFFER, meshComponent->normals.size() * sizeof(Vector3), (GLfloat*)(&meshComponent->normals[0]), GL_STATIC_DRAW);
+
+			// Specify to opengl how vNormal in vertex shader is to interpret GL_ARRAY_BUFFER data
+			attrib = glGetAttribLocation(shaderComponent->getProgram(), "vNormal");
+			glVertexAttribPointer(attrib, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
+
+			// Sets vNormal to use currently bound GL_ARRAY_BUFFER
+			glEnableVertexAttribArray(attrib);
+
+			// Set Uniforms
+			GLint modelUniform = glGetUniformLocation(shaderComponent->getProgram(), "model");
+			GLint viewUniform = glGetUniformLocation(shaderComponent->getProgram(), "view");
+			GLint projectionUniform = glGetUniformLocation(shaderComponent->getProgram(), "projection");
+			GLint colorUniform = glGetUniformLocation(shaderComponent->getProgram(), "color");
+			GLint ambientUniform = glGetUniformLocation(shaderComponent->getProgram(), "ambient");
+
+			glUniformMatrix4fv(modelUniform, 1, GL_FALSE, glm::value_ptr(this->createModelMatrix(gameObject.get())));
+			glUniformMatrix4fv(viewUniform, 1, GL_FALSE, glm::value_ptr(this->createViewMatrix(gameObject.get())));
+			glUniformMatrix4fv(projectionUniform, 1, GL_FALSE, glm::value_ptr(this->createProjectionMatrix(gameObject.get())));
+			glUniform4fv(colorUniform, 1, glm::value_ptr(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)));
+			glUniform3fv(ambientUniform, 1, glm::value_ptr(glm::vec3(1.0f, 1.0f, 1.0f)));
 
 			// Draw triangles
 			glDrawArrays(GL_TRIANGLES, 0, meshComponent->vertices.size());
 
-			glDeleteBuffers(1, vbos);
+			glDeleteBuffers(2, vbos);
 			glDeleteVertexArrays(1, vaos);
 		}
 
@@ -116,25 +136,6 @@ namespace GameEngine
 			// Making assumption user did not create a cyclical object tree
 			this->renderGameObject(gameObject);
 		}
-	}
-
-	glm::mat4 Scene::createMVP(GameObject* gameObject)
-	{
-		glm::mat4 modelMatrix = this->createModelMatrix(gameObject);
-
-		// Get camera absolute position, forward, and up. Camera can be child of object which can change what is in the camera object
-		Vector3 cameraAbsolutePosition = this->activeCamera->position();
-		glm::vec3 cameraPosition = glm::vec3(cameraAbsolutePosition.x, cameraAbsolutePosition.y, cameraAbsolutePosition.z);
-		glm::vec3 cameraForward = glm::vec3(this->activeCamera->forward().x, this->activeCamera->forward().y, this->activeCamera->forward().z);
-		glm::vec3 cameraUp = glm::vec3(this->activeCamera->up().x, this->activeCamera->up().y, this->activeCamera->up().z);
-
-		// Create view matrix
-		glm::mat4 viewMatrix = glm::lookAt(cameraPosition, cameraPosition + cameraForward, cameraUp);
-
-		// Create projection matrix
-		glm::mat4 projectionMatrix = glm::perspective(this->activeCamera->fov, this->activeCamera->aspect, this->activeCamera->near, this->activeCamera->far);
-
-		return projectionMatrix * viewMatrix * modelMatrix;
 	}
 
 	glm::mat4 Scene::createModelMatrix(GameObject* gameObject, bool multiplyTranslation, bool multiplyScale, bool multiplyRotation)
@@ -161,10 +162,22 @@ namespace GameEngine
 			return thisGameObjectsModelMatrix;
 		}
 
-		// Multiply the model matrix of this game object with it's parent's model matrix
-		//return this->createModelMatrix(gameObject->parent, multiplyTranslation, multiplyScale, multiplyRotation) * thisGameObjectsModelMatrix;
 		return thisGameObjectsModelMatrix;
 	}
 
+	glm::mat4 Scene::createViewMatrix(GameObject* gameObject)
+	{
+		Vector3 cameraAbsolutePosition = this->activeCamera->position();
+		glm::vec3 cameraPosition = glm::vec3(cameraAbsolutePosition.x, cameraAbsolutePosition.y, cameraAbsolutePosition.z);
+		glm::vec3 cameraForward = glm::vec3(this->activeCamera->forward().x, this->activeCamera->forward().y, this->activeCamera->forward().z);
+		glm::vec3 cameraUp = glm::vec3(this->activeCamera->up().x, this->activeCamera->up().y, this->activeCamera->up().z);
+
+		return glm::lookAt(cameraPosition, cameraPosition + cameraForward, cameraUp);
+	}
+
+	glm::mat4 Scene::createProjectionMatrix(GameObject* gameObject)
+	{
+		return glm::perspective(this->activeCamera->fov, this->activeCamera->aspect, this->activeCamera->near, this->activeCamera->far);
+	}
 
 }

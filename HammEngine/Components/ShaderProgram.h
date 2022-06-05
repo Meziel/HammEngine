@@ -21,8 +21,8 @@ namespace GameEngine
         bool shadersCompiled;
 
         GAMEENGINE_API ShaderProgram(
-            const std::string vertexFilePath = "C:/Users/Michael/source/repos/HammEngine/HammEngine/Shaders/BasicVertex.glsl",
-            const std::string fragmentFilePath = "C:/Users/Michael/source/repos/HammEngine/HammEngine/Shaders/BasicFragment.glsl");
+            const std::string vertexFilePath = "C:/Users/Michael/source/repos/HammEngine/HammEngine/Shaders/PhongVertex.glsl",
+            const std::string fragmentFilePath = "C:/Users/Michael/source/repos/HammEngine/HammEngine/Shaders/PhongFragment.glsl");
         GAMEENGINE_API ~ShaderProgram();
         ShaderProgram(const ShaderProgram& shader) = delete;
         ShaderProgram&operator=(const ShaderProgram& shader) = delete;

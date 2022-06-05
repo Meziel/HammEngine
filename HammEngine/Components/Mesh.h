@@ -11,6 +11,7 @@ namespace GameEngine
     {
     public:
         std::vector<Vector3> vertices;
+        std::vector<Vector3> normals;
 
         GAMEENGINE_API Mesh::Mesh();
     };

@@ -30,7 +30,8 @@ namespace GameEngine
 		void renderGameObject(std::shared_ptr<GameObject> gameObject);
 
 	private:
-		glm::mat4 createMVP(GameObject* gameObject);
 		glm::mat4 createModelMatrix(GameObject* gameObject, bool multiplyTranslation = true, bool multiplyScale = true, bool multiplyRotation = true);
+		glm::mat4 createViewMatrix(GameObject* gameObject);
+		glm::mat4 createProjectionMatrix(GameObject* gameObject);
 	};
 }
