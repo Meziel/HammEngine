@@ -118,11 +118,18 @@ namespace GameEngine
 			GLint colorUniform = glGetUniformLocation(shaderComponent->getProgram(), "color");
 			GLint ambientUniform = glGetUniformLocation(shaderComponent->getProgram(), "ambient");
 
+			// Lighting
+			GLint lightWorldPositionUniform = glGetUniformLocation(shaderComponent->getProgram(), "lightWorldPosition");
+			GLint lightDiffuseColorUniform = glGetUniformLocation(shaderComponent->getProgram(), "lightDiffuseColor");
+
 			glUniformMatrix4fv(modelUniform, 1, GL_FALSE, glm::value_ptr(this->createModelMatrix(gameObject.get())));
 			glUniformMatrix4fv(viewUniform, 1, GL_FALSE, glm::value_ptr(this->createViewMatrix(gameObject.get())));
 			glUniformMatrix4fv(projectionUniform, 1, GL_FALSE, glm::value_ptr(this->createProjectionMatrix(gameObject.get())));
 			glUniform4fv(colorUniform, 1, glm::value_ptr(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)));
-			glUniform3fv(ambientUniform, 1, glm::value_ptr(glm::vec3(1.0f, 1.0f, 1.0f)));
+			glUniform3fv(ambientUniform, 1, glm::value_ptr(glm::vec3(0.2f, 0.2f, 0.2f)));
+
+			glUniform3fv(lightWorldPositionUniform, 1, glm::value_ptr(glm::vec3(1.0f, 1.0f, 1.0f)));
+			glUniform4fv(lightDiffuseColorUniform, 1, glm::value_ptr(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)));
 
 			// Draw triangles
 			glDrawArrays(GL_TRIANGLES, 0, meshComponent->vertices.size());
