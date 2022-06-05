@@ -1,4 +1,8 @@
-*Getting Started
+# About
+Hamm Engine is a custom game engine made from scratch.
+The Hamm Engine is made in C++ it uses OpenGL. Conan is used as a package manager for the project, and the project is built using CMake for cross-platform support.
+
+# Getting Started
 1) Download CMake
 	https://cmake.org/download/
 	Note: Make sure environment paths are setup
@@ -11,9 +15,3 @@
 6) cd to root directory
 7) Run 'cmake .'
 8) Run 'cmake --build .'
-
-WEBGL support:
-1) Download emscripten
-	https://emscripten.org/docs/getting_started/downloads.html#platform-notes-installation-instructions-sdk
-	Note: When setting up make sure environment paths are setup: emsdk.bat activate --system
-2) Download mingw if using windows https://sourceforge.net/projects/mingw/
