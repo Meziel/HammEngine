@@ -8,6 +8,10 @@ namespace GameEngine
     class Cube : public Mesh
     {
     public:
+
+        /**
+         * Cube constructor
+         */
         GAMEENGINE_API Cube::Cube();
     };
 }

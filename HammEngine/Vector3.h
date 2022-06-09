@@ -11,11 +11,19 @@ namespace GameEngine
         float y;
         float z;
 
+        // Operator overrides to allows operations with different datatypes
+
+        /**
+         * Scalar multiplication 
+         */
         Vector3 operator *(const float& multiplier) const
         {
             return { this->x * multiplier, this->y * multiplier, this->z * multiplier };
         }
 
+        /**
+         * Cross product with another vector
+         */
         Vector3 operator *(const Vector3& other) const
         {
             glm::vec3 a = glm::vec3(this->x, this->y, this->z);
@@ -24,6 +32,9 @@ namespace GameEngine
             return { cross.x, cross.y, cross.z };
         }
 
+        /**
+         * Cross product reassignment with another vector
+         */
         Vector3& operator*=(const Vector3& other)
         {
             glm::vec3 a = glm::vec3(this->x, this->y, this->z);
@@ -35,11 +46,17 @@ namespace GameEngine
             return *this;
         }
 
+        /**
+         * Vector addition
+         */
         Vector3 operator+(const Vector3& other) const
         {
             return { this->x + other.x, this->y + other.y, this->z + other.z };
         }
 
+        /**
+         * Vector addition reassignment
+         */
         Vector3& operator+=(const Vector3& other)
         {
             this->x += other.x;
@@ -48,16 +65,25 @@ namespace GameEngine
             return *this;
         }
 
+        /**
+         * Scalar multitiplication with negative 1
+         */
         Vector3 operator-() const
         {
             return *this * -1;
         }
 
+        /**
+         * Vector subtraction
+         */
         Vector3 operator-(const Vector3& other) const
         {
             return *this - other;
         }
 
+        /**
+         * Vector subtraction reassignment
+         */
         Vector3& operator-=(const Vector3& other)
         {
             *this += -other;
@@ -65,12 +91,18 @@ namespace GameEngine
         }
     };
 
+    /**
+     * Output stream override
+     */
     inline std::ostream& operator<<(std::ostream& os, const Vector3& vector3)
     {
         os << "(x=" << vector3.x << "," << "y=" << vector3.y << "," << "z=" << vector3.z << ")";
         return os;
     }
 
+    /**
+     * Affine transformation override with glm mat4
+     */
     inline Vector3& operator*(glm::mat4 mat, const Vector3& vector3)
     {
         glm::vec4 result = mat * glm::vec4(vector3.x, vector3.y, vector3.z, 1.0f);

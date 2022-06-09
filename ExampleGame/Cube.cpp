@@ -31,7 +31,6 @@ namespace ExampleGame
 
 		// Rotate the cube
 		Vector3 newCubeRotation = this->relativeRotation();
-		//std::cout << timeSinceLastTickSeconds << std::endl;
 		newCubeRotation.y += std::fmodf(DEGREES_PER_SECOND * timeSinceLastTickSeconds, 2 * M_PI);
 		this->relativeRotation(newCubeRotation);
 
