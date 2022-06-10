@@ -5,14 +5,36 @@ namespace GameEngine
     Cube::Cube()
     {
         this->vertices = {
-            {-1.0f,  1.0f,  1.0f},
-            { 1.0f,  1.0f,  1.0f},
-            { 1.0f, -1.0f,  1.0f},
-            {-1.0f, -1.0f,  1.0f},
-            {-1.0f,  1.0f, -1.0f},
-            { 1.0f,  1.0f, -1.0f},
-            { 1.0f, -1.0f, -1.0f},
-            {-1.0f, -1.0f, -1.0f}
+            // Front
+            {-1.0f,  1.0f,  1.0f}, // Front top left
+            { 1.0f,  1.0f,  1.0f}, // Front top right
+            { 1.0f, -1.0f,  1.0f}, // Front bottom right
+            {-1.0f, -1.0f,  1.0f}, // Front bottom left
+            // Back
+            {-1.0f,  1.0f, -1.0f}, // Back top left 
+            { 1.0f,  1.0f, -1.0f}, // Back top right 
+            { 1.0f, -1.0f, -1.0f}, // Back bottom right 
+            {-1.0f, -1.0f, -1.0f}, // Back bottom left 
+            // top
+            {-1.0f,  1.0f,  1.0f}, // Front top left
+            { 1.0f,  1.0f,  1.0f}, // Front top right
+            {-1.0f,  1.0f, -1.0f}, // Back top left
+            { 1.0f,  1.0f, -1.0f}, // Back top right 
+            // Botom
+            {-1.0f, -1.0f,  1.0f}, // Front bottom left
+            { 1.0f, -1.0f,  1.0f}, // Front bottom right
+            {-1.0f, -1.0f, -1.0f}, // Back bottom left
+            { 1.0f, -1.0f, -1.0f}, // Back bottom right
+            // left
+            {-1.0f,  1.0f,  1.0f}, // Front top left
+            {-1.0f, -1.0f,  1.0f}, // Front bottom left
+            {-1.0f,  1.0f, -1.0f}, // Back top left
+            {-1.0f, -1.0f, -1.0f}, // Back bottom left  
+            // right
+            { 1.0f,  1.0f,  1.0f}, // Front top right
+            { 1.0f, -1.0f,  1.0f}, // Front bottom right
+            { 1.0f,  1.0f, -1.0f}, // Back top right
+            { 1.0f, -1.0f, -1.0f}, // Back bottom right  
         };
 
         this->indices = {
@@ -22,24 +44,22 @@ namespace GameEngine
             // Back
             5, 6, 7,
             4, 5, 7,
-            // Top
-            4, 0, 1,
-            5, 4, 1,
-            // Bottom
-            6, 3, 2,
-            7, 6, 2,
-            // Left
-            4, 7, 3,
-            0, 4, 3,
-            // Right
-            1, 2, 6,
-            5, 1, 6
+            // top
+            10, 8, 9,
+            11, 10, 9,
+            // bottom
+            15, 13, 12,
+            14, 15, 12,
+            // left
+            18, 19, 17,
+            16, 18, 17,
+            // right
+            20, 21, 23,
+            22, 20, 23
         };
 
         this->normals = {
             // Front
-            {0.0f, 0.0f, 1.0f},
-            {0.0f, 0.0f, 1.0f},
             {0.0f, 0.0f, 1.0f},
             {0.0f, 0.0f, 1.0f},
             {0.0f, 0.0f, 1.0f},
@@ -50,35 +70,26 @@ namespace GameEngine
             {0.0f, 0.0f, -1.0f},
             {0.0f, 0.0f, -1.0f},
             {0.0f, 0.0f, -1.0f},
-            {0.0f, 0.0f, -1.0f},
-            {0.0f, 0.0f, -1.0f},
-
-            // Top
+            
+            // top
             {0.0f, 1.0f, 0.0f},
             {0.0f, 1.0f, 0.0f},
             {0.0f, 1.0f, 0.0f},
             {0.0f, 1.0f, 0.0f},
-            {0.0f, 1.0f, 0.0f},
-
-            // Bottom
+            
+            // bottom
             {0.0f, -1.0f, 0.0f},
             {0.0f, -1.0f, 0.0f},
             {0.0f, -1.0f, 0.0f},
             {0.0f, -1.0f, 0.0f},
-            {0.0f, -1.0f, 0.0f},
-            {0.0f, -1.0f, 0.0f},
-
-            // Left
+            
+            // left
             {-1.0f, 0.0f, 0.0f},
             {-1.0f, 0.0f, 0.0f},
             {-1.0f, 0.0f, 0.0f},
             {-1.0f, 0.0f, 0.0f},
-            {-1.0f, 0.0f, 0.0f},
-            {-1.0f, 0.0f, 0.0f},
-
-            // Right
-            {1.0f, 0.0f, 0.0f},
-            {1.0f, 0.0f, 0.0f},
+            
+            // right
             {1.0f, 0.0f, 0.0f},
             {1.0f, 0.0f, 0.0f},
             {1.0f, 0.0f, 0.0f},

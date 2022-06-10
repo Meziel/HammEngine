@@ -101,7 +101,8 @@ namespace GameEngine
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GL_BLEND);
 
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        glEnable(GL_CULL_FACE);
+        glPolygonMode(GL_FRONT, GL_FILL);
 
         // Compile shader programs
         for (ShaderProgram* shaderProgram : ShaderProgram::shaderPrograms)
