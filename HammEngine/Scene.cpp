@@ -77,19 +77,23 @@ namespace GameEngine
 			// Put vertices in a vertex buffer object
 			GLuint vaos[1];
 			GLuint vbos[2];
+			GLuint ebo;
 			GLint attrib;
 
 			// Tell OpenGL to allocate 1 buffer & array object
 			glGenVertexArrays(1, vaos);
 			glGenBuffers(2, vbos);
+			glGenBuffers(1, &ebo);
 
 			glBindVertexArray(vaos[0]);;
 
-			// Bind to index 0 of the buffer object. Subsequent buffer functions will use this index
-			glBindBuffer(GL_ARRAY_BUFFER, vbos[0]);
-
 			// Add vertices to buffer object
+			glBindBuffer(GL_ARRAY_BUFFER, vbos[0]);
 			glBufferData(GL_ARRAY_BUFFER, meshComponent->vertices.size() * sizeof(Vector3), (GLfloat*)(&meshComponent->vertices[0]), GL_STATIC_DRAW);
+			
+			// Add index array in an element buffer object
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, meshComponent->indices.size() * sizeof(float), (GLfloat*)(&meshComponent->indices[0]), GL_STATIC_DRAW);
 
 			// Specify to opengl how vPosition in vertex shader is to interpret GL_ARRAY_BUFFER data
 			attrib = glGetAttribLocation(shaderComponent->getProgram(), "vPosition");
@@ -98,10 +102,8 @@ namespace GameEngine
 			// Sets vPosition to use currently bound GL_ARRAY_BUFFER
 			glEnableVertexAttribArray(attrib);
 
-			// Bind to index 1 of the buffer object. Subsequent buffer functions will use this index
-			glBindBuffer(GL_ARRAY_BUFFER, vbos[1]);
-
 			// Add normals to buffer object
+			glBindBuffer(GL_ARRAY_BUFFER, vbos[1]);
 			glBufferData(GL_ARRAY_BUFFER, meshComponent->normals.size() * sizeof(Vector3), (GLfloat*)(&meshComponent->normals[0]), GL_STATIC_DRAW);
 
 			// Specify to opengl how vNormal in vertex shader is to interpret GL_ARRAY_BUFFER data
@@ -132,7 +134,7 @@ namespace GameEngine
 			glUniform4fv(lightDiffuseColorUniform, 1, glm::value_ptr(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)));
 
 			// Draw triangles
-			glDrawArrays(GL_TRIANGLES, 0, meshComponent->vertices.size());
+			glDrawElements(GL_TRIANGLES, meshComponent->indices.size(), GL_UNSIGNED_INT, 0);
 
 			glDeleteBuffers(2, vbos);
 			glDeleteVertexArrays(1, vaos);
